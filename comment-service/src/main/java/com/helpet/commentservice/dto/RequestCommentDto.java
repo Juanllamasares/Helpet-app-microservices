@@ -12,6 +12,6 @@ public class RequestCommentDto {
     private Long id;
     private Date date;
     private String content;
-    private Long postId;
-    private Long userId;
+    private Long post;
+    private Long user;
 }

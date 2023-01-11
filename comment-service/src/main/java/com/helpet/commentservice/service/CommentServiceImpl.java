@@ -1,6 +1,7 @@
 package com.helpet.commentservice.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -23,10 +24,12 @@ public class CommentServiceImpl implements ICommentService{
 
     @Autowired
     private ModelMapper modelMapper;
+    
 
     @Override
     public void createComment(CreateCommentDto commentDto) {
-        Comment commentEntity = modelMapper.map(commentDto,Comment.class);
+        commentDto.setDate(new Date());
+        Comment commentEntity = modelMapper.map(commentDto, Comment.class);
         commentRepo.save(commentEntity);
     }
 
@@ -44,9 +47,24 @@ public class CommentServiceImpl implements ICommentService{
 
     @Override
     public List<RequestCommentDto> findByPostId(Long id) {
-        List<Comment> commentEntities = commentRepo.findByPostId(id);
+        List<Comment> commentEntities = commentRepo.findByPost(id);
         List<RequestCommentDto> dtos = new ArrayList<>();
         commentEntities.forEach(entity -> dtos.add(modelMapper.map(entity, RequestCommentDto.class)));
+        return dtos;
+    }
+
+    @Override
+    public RequestCommentDto findCommentById(Long id) {
+        if(commentRepo.findById(id)==null) return null;
+        RequestCommentDto dto = modelMapper.map(commentRepo.findById(id), RequestCommentDto.class);
+        return dto;
+    }
+
+    @Override
+    public List<RequestCommentDto> getComments() {
+        List<Comment> commentsEntities = commentRepo.findAll();
+        List<RequestCommentDto> dtos = new ArrayList<>();
+        commentsEntities.forEach(entity -> dtos.add(modelMapper.map(entity, RequestCommentDto.class)));
         return dtos;
     }
     

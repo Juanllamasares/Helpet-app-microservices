@@ -16,4 +16,8 @@ public interface ICommentService {
 
     public List<RequestCommentDto> findByPostId(Long id);
 
+    public RequestCommentDto findCommentById(Long id);
+
+    public List<RequestCommentDto> getComments();
+
 }

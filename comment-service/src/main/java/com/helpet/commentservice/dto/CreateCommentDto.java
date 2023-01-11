@@ -19,7 +19,7 @@ public class CreateCommentDto {
     @Size(min = 1,max = 500,message = "The content must have a minimum of 2 and a maximum of 100 characters.")
     private String content;
     @NotNull
-    private Long postId;
+    private Long post;
     @NotNull
-    private Long userId;
+    private Long user;
 }
