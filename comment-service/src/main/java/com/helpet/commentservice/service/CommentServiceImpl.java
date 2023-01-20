@@ -67,5 +67,10 @@ public class CommentServiceImpl implements ICommentService{
         commentsEntities.forEach(entity -> dtos.add(modelMapper.map(entity, RequestCommentDto.class)));
         return dtos;
     }
+
+    @Override
+    public void deleteAllByPostId(Long id) {
+        commentRepo.deleteByPost(id);
+    }
     
 }

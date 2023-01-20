@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.helpet.commentservice.clients.PostFeingClient;
 import com.helpet.commentservice.dto.CreateCommentDto;
 import com.helpet.commentservice.dto.RequestCommentDto;
 import com.helpet.commentservice.service.CommentServiceImpl;
@@ -27,6 +29,9 @@ public class CommentController {
 
     @Autowired
     private CommentServiceImpl commentService;
+
+    @Autowired
+    private PostFeingClient postFeingClient;
 
     @PostMapping("/create")
     public ResponseEntity<String> createComment(@Valid @RequestBody CreateCommentDto createCommentDto) {
@@ -51,4 +56,22 @@ public class CommentController {
         return ResponseEntity.ok(commentsDtos);
     }
 
+    @DeleteMapping("/delete/{commentId}")
+    public  ResponseEntity<Map<String,String>> deleteComment(@PathVariable("commentId") Long id){
+        Map<String,String> response = new HashMap<>();
+        if(commentService.findCommentById(id)==null)return ResponseEntity.notFound().build();
+        commentService.deleteComment(id);
+        response.put("message", "Comment successfully be deleted");
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/delete-by-post-id/{postId}")
+    public ResponseEntity<Map<String,String>> deleteCommentByPostId(@PathVariable("postId") Long id){
+        if(postFeingClient.getPostById(id) == null) return ResponseEntity.notFound().build();
+        if(commentService.findByPostId(id) == null || commentService.findByPostId(id).isEmpty())return ResponseEntity.noContent().build();
+        commentService.deleteAllByPostId(id);
+        Map<String,String> response = new HashMap<>();
+        response.put("message", "Comments successfully be deleted");
+        return ResponseEntity.ok(response);
+    }
 }

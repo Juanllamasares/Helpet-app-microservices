@@ -10,4 +10,5 @@ import com.helpet.commentservice.entity.Comment;
 @Repository
 public interface ICommentRepository extends JpaRepository<Comment,Long>{
     List<Comment> findByPost(Long postId);
+    void deleteByPost(Long postId);
 }

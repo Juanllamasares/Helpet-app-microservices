@@ -20,4 +20,6 @@ public interface ICommentService {
 
     public List<RequestCommentDto> getComments();
 
+    public void deleteAllByPostId(Long id);
+
 }
