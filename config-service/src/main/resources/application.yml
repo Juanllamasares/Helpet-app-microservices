@@ -6,6 +6,7 @@ spring:
         config:
             server:
                 git:
+                    default-label: main
                     uri: https://github.com/Juanllamasares/Helpet-app-microservices
                     search-paths: config-data
     application: 
