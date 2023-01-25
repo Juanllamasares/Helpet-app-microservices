@@ -21,4 +21,6 @@ public class PostDto {
 
     private String location;
 
+    private Long user;
+
 }

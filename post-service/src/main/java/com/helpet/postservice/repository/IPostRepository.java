@@ -12,4 +12,6 @@ import com.helpet.postservice.entity.Post;
 @Repository
 public interface IPostRepository extends JpaRepository<Post, Long>{
     List<Post> findByLocation(String location);
+    List<Post> findByUser(Long user);
+    void deleteByUser(Long id);
 }

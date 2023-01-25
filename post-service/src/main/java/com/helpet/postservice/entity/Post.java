@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,4 +44,8 @@ public class Post {
     @NotNull
     @Size(min = 5, max = 200, message = "The location must have a minimum of 5 and a maximum of 200 characters.")
     private String location;
+
+    @NotNull
+    @Column(name = "user_id")
+    private Long user;
 }

@@ -20,4 +20,8 @@ public interface IPostService {
 
     public void updatePost(Long id, PostDto postDto);
 
+    public void deletePostsByUserId(Long userId);
+
+    public List<PostDto> getPostsByUser(Long userId);
+
 }

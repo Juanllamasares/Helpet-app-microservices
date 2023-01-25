@@ -34,4 +34,7 @@ public class CreatePostDto {
     @Size(min = 5, max = 200, message = "The location must have a minimum of 5 and a maximum of 200 characters.")
     private String location;
 
+    @NotNull
+    private Long user;
+
 }

@@ -81,4 +81,17 @@ public class PostServiceImpl implements IPostService {
             postRepo.save(postEntity);
     }
 
+    @Override
+    public void deletePostsByUserId(Long userId) {
+        postRepo.deleteByUser(userId);
+    }
+
+    @Override
+    public List<PostDto> getPostsByUser(Long userId) {
+        List<Post> postsEntities = postRepo.findByUser(userId);
+        List<PostDto> dtos = new LinkedList<>();
+        postsEntities.forEach(entity-> dtos.add(0, modelMapper.map(entity, PostDto.class)));
+        return dtos;
+    }
+
 }
