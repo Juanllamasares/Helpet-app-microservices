@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.helpet.postservice.clients.PostFeingClient;
+import com.helpet.postservice.clients.UserFeingClient;
 import com.helpet.postservice.dto.CreatePostDto;
 import com.helpet.postservice.dto.PostDto;
 import com.helpet.postservice.service.PostServiceImpl;
@@ -31,7 +31,7 @@ public class PostController {
     private PostServiceImpl postService;
 
     @Autowired
-    private PostFeingClient postClient; 
+    private UserFeingClient userClient; 
 
     @PostMapping("/create")
     public ResponseEntity<String> createPost(@Valid @RequestBody CreatePostDto createPostDto){
@@ -75,14 +75,14 @@ public class PostController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable("userId") Long id){
-        if(postClient.getUserById(id)==null) return ResponseEntity.notFound().build();
+        if(userClient.getUserById(id)==null) return ResponseEntity.notFound().build();
         List<PostDto> posts = postService.getPostsByUser(id);
         return ResponseEntity.ok(posts);
     }
 
     @DeleteMapping("/delete-user/{userId}")
     public ResponseEntity<Map<String,String>> deletePostsByUser(@PathVariable("userId") Long id){
-        if(postClient.getUserById(id)==null) return ResponseEntity.notFound().build();
+        if(userClient.getUserById(id)==null) return ResponseEntity.notFound().build();
         postService.deletePostsByUserId(id);
         Map<String,String> result = new HashMap<>();
         result.put("message", "Posts user: "+ id + " ,successfully be deleted.");

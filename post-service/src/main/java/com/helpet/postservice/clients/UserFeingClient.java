@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.helpet.postservice.models.User;
 
 @FeignClient(name = "user-service", url = "http://localhost:8080/api/users")
-public interface PostFeingClient {
+public interface UserFeingClient {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id);
 }
