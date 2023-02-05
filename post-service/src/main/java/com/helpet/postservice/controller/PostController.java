@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.helpet.postservice.clients.CommentFeingClient;
 import com.helpet.postservice.clients.UserFeingClient;
 import com.helpet.postservice.dto.CreatePostDto;
 import com.helpet.postservice.dto.PostDto;
@@ -33,6 +34,9 @@ public class PostController {
     @Autowired
     private UserFeingClient userClient; 
 
+    @Autowired
+    private CommentFeingClient commentClient;
+
     @PostMapping("/create")
     public ResponseEntity<String> createPost(@Valid @RequestBody CreatePostDto createPostDto){
         postService.createPost(createPostDto);
@@ -43,6 +47,7 @@ public class PostController {
     public ResponseEntity<String> deletePost(@PathVariable("id") Long id){
         if(postService.getPostById(id) == null) return new ResponseEntity<>("Post not found.",HttpStatus.BAD_REQUEST);
         postService.deletePost(id);
+        commentClient.deleteCommentsByPostId(id);
         return new ResponseEntity<>("Post successfully deleted.",HttpStatus.OK);
     }
 

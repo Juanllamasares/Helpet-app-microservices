@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.helpet.commentservice.clients.PostFeingClient;
+import com.helpet.commentservice.clients.UserFeingClient;
 import com.helpet.commentservice.dto.CreateCommentDto;
 import com.helpet.commentservice.dto.RequestCommentDto;
 import com.helpet.commentservice.service.CommentServiceImpl;
@@ -31,10 +32,15 @@ public class CommentController {
     private CommentServiceImpl commentService;
 
     @Autowired
-    private PostFeingClient postFeingClient;
+    private PostFeingClient postClient;
+
+    @Autowired
+    private UserFeingClient userClient;
 
     @PostMapping("/create")
     public ResponseEntity<String> createComment(@Valid @RequestBody CreateCommentDto createCommentDto) {
+        if(userClient.getUserById(createCommentDto.getUser())==null)return ResponseEntity.notFound().build();
+        if(postClient.getPostById(createCommentDto.getPost())==null)return ResponseEntity.notFound().build();
         commentService.createComment(createCommentDto);
         return new ResponseEntity<>("Comment successfully be created.", HttpStatus.CREATED);
     }
@@ -67,7 +73,7 @@ public class CommentController {
 
     @DeleteMapping("/delete-by-post-id/{postId}")
     public ResponseEntity<Map<String,String>> deleteCommentByPostId(@PathVariable("postId") Long id){
-        if(postFeingClient.getPostById(id) == null) return ResponseEntity.notFound().build();
+        if(postClient.getPostById(id) == null) return ResponseEntity.notFound().build();
         if(commentService.findByPostId(id) == null || commentService.findByPostId(id).isEmpty())return ResponseEntity.noContent().build();
         commentService.deleteAllByPostId(id);
         Map<String,String> response = new HashMap<>();
