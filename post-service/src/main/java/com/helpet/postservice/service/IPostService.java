@@ -8,7 +8,7 @@ import com.helpet.postservice.dto.PostDto;
 
 public interface IPostService {
     
-    public void createPost(CreatePostDto createPostDto);
+    public boolean createPost(CreatePostDto createPostDto);
 
     public void deletePost(Long id);
 

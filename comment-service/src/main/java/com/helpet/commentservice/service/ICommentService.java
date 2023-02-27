@@ -20,6 +20,10 @@ public interface ICommentService {
 
     public List<RequestCommentDto> getComments();
 
-    public void deleteAllByPostId(Long id);
+    public List<RequestCommentDto> getCommentsByUser(Long userId);
+
+    public void deleteCommentsByPostId(Long id);
+
+    public void deleteCommentsByUserId(Long id);
 
 }

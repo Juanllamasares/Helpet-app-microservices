@@ -8,11 +8,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.helpet.postservice.clients.CommentFeingClient;
+import com.helpet.postservice.clients.UserFeingClient;
 import com.helpet.postservice.dto.CreatePostDto;
 import com.helpet.postservice.dto.PostDto;
 import com.helpet.postservice.entity.Post;
 import com.helpet.postservice.repository.IPostRepository;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -23,17 +26,34 @@ public class PostServiceImpl implements IPostService {
     private IPostRepository postRepo;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private UserFeingClient userClient;
+    @Autowired
+    private CommentFeingClient commentClient;
 
     @Override
-    public void createPost(CreatePostDto createPostDto) {
+    @CircuitBreaker(name = "usersCB",fallbackMethod = "fallBackGetUser")
+    public boolean createPost(CreatePostDto createPostDto) {
+        if(userClient.getUserById(createPostDto.getUser())==null)return false;
         Post postEntity = modelMapper.map(createPostDto, Post.class);
         postEntity.setDate(new Date());
         postRepo.save(postEntity);
+        return true;
+    }
+
+    public String fallBackGetUser(){
+        return "User service out of service.";
     }
 
     @Override
+    @CircuitBreaker(name = "commentsCB", fallbackMethod = "fallBackDeleteComments")
     public void deletePost(Long id) {
         postRepo.deleteById(id);
+        commentClient.deleteCommentsByPostId(id);
+    }
+
+    public String fallBackDeleteComments(){
+        return "Comment service out of service.";
     }
 
     @Override
@@ -84,6 +104,7 @@ public class PostServiceImpl implements IPostService {
     @Override
     public void deletePostsByUserId(Long userId) {
         postRepo.deleteByUser(userId);
+    
     }
 
     @Override

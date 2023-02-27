@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.helpet.commentservice.clients.PostFeingClient;
-import com.helpet.commentservice.clients.UserFeingClient;
 import com.helpet.commentservice.dto.CreateCommentDto;
 import com.helpet.commentservice.dto.RequestCommentDto;
 import com.helpet.commentservice.service.CommentServiceImpl;
@@ -31,16 +29,8 @@ public class CommentController {
     @Autowired
     private CommentServiceImpl commentService;
 
-    @Autowired
-    private PostFeingClient postClient;
-
-    @Autowired
-    private UserFeingClient userClient;
-
     @PostMapping("/create")
     public ResponseEntity<String> createComment(@Valid @RequestBody CreateCommentDto createCommentDto) {
-        if(userClient.getUserById(createCommentDto.getUser())==null)return ResponseEntity.notFound().build();
-        if(postClient.getPostById(createCommentDto.getPost())==null)return ResponseEntity.notFound().build();
         commentService.createComment(createCommentDto);
         return new ResponseEntity<>("Comment successfully be created.", HttpStatus.CREATED);
     }
@@ -61,6 +51,12 @@ public class CommentController {
         List<RequestCommentDto> commentsDtos = commentService.getComments();
         return ResponseEntity.ok(commentsDtos);
     }
+    
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<RequestCommentDto>> getCommentsByUser(@PathVariable("userId") Long id){
+        List<RequestCommentDto> commentsDtos = commentService.getComments();
+        return ResponseEntity.ok(commentsDtos);
+    }
 
     @DeleteMapping("/delete/{commentId}")
     public  ResponseEntity<Map<String,String>> deleteComment(@PathVariable("commentId") Long id){
@@ -71,13 +67,23 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
+    //section connect ms
+
     @DeleteMapping("/delete-by-post-id/{postId}")
     public ResponseEntity<Map<String,String>> deleteCommentByPostId(@PathVariable("postId") Long id){
-        if(postClient.getPostById(id) == null) return ResponseEntity.notFound().build();
         if(commentService.findByPostId(id) == null || commentService.findByPostId(id).isEmpty())return ResponseEntity.noContent().build();
-        commentService.deleteAllByPostId(id);
+        commentService.deleteCommentsByPostId(id);
         Map<String,String> response = new HashMap<>();
         response.put("message", "Comments successfully be deleted");
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/delete-by-user-id/{userId}")
+    public ResponseEntity<Map<String,String>> deleteCommentsByUserId(@PathVariable("userId") Long id){
+        if(commentService.getCommentsByUser(id) == null) return ResponseEntity.noContent().build();
+        Map<String,String> response = new HashMap<>();
+        commentService.deleteCommentsByUserId(id);
+        response.put("message", "User comments successfully be deleted");
         return ResponseEntity.ok(response);
     }
 }

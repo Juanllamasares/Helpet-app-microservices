@@ -57,7 +57,7 @@ public class UserController {
         if (userService.getUserById(id) == null)
             return new ResponseEntity<>("User not found.", HttpStatus.BAD_REQUEST);
         userService.deleteUser(id);
-        return new ResponseEntity<>("User successfully deleted.", HttpStatus.OK);
+        return new ResponseEntity<>("User be successfully deleted.", HttpStatus.OK);
     }
 
 }

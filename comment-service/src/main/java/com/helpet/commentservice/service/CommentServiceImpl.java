@@ -2,6 +2,7 @@ package com.helpet.commentservice.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -69,8 +70,21 @@ public class CommentServiceImpl implements ICommentService{
     }
 
     @Override
-    public void deleteAllByPostId(Long id) {
+    public void deleteCommentsByPostId(Long id) {
         commentRepo.deleteByPost(id);
+    }
+
+    @Override
+    public List<RequestCommentDto> getCommentsByUser(Long userId) {
+       List<Comment> entities = commentRepo.findByUser(userId);
+       List<RequestCommentDto> dtos = new LinkedList<>();
+       entities.forEach(entity -> dtos.add(0, modelMapper.map(entity, RequestCommentDto.class)));
+       return dtos;
+    }
+
+    @Override
+    public void deleteCommentsByUserId(Long id) {
+        commentRepo.deleteByUser(id);
     }
     
 }

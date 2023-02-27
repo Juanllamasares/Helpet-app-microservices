@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.helpet.postservice.clients.CommentFeingClient;
-import com.helpet.postservice.clients.UserFeingClient;
 import com.helpet.postservice.dto.CreatePostDto;
 import com.helpet.postservice.dto.PostDto;
 import com.helpet.postservice.service.PostServiceImpl;
@@ -31,23 +29,17 @@ public class PostController {
     @Autowired
     private PostServiceImpl postService;
 
-    @Autowired
-    private UserFeingClient userClient; 
-
-    @Autowired
-    private CommentFeingClient commentClient;
-
     @PostMapping("/create")
     public ResponseEntity<String> createPost(@Valid @RequestBody CreatePostDto createPostDto){
+        if(!postService.createPost(createPostDto))return ResponseEntity.notFound().build();
         postService.createPost(createPostDto);
         return new ResponseEntity<>("Post successfully created.",HttpStatus.CREATED);
     }
-
+    
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deletePost(@PathVariable("id") Long id){
         if(postService.getPostById(id) == null) return new ResponseEntity<>("Post not found.",HttpStatus.BAD_REQUEST);
         postService.deletePost(id);
-        commentClient.deleteCommentsByPostId(id);
         return new ResponseEntity<>("Post successfully deleted.",HttpStatus.OK);
     }
 
@@ -77,17 +69,14 @@ public class PostController {
         return ResponseEntity.ok("Post successfully updated.");
 
     }
-
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable("userId") Long id){
-        if(userClient.getUserById(id)==null) return ResponseEntity.notFound().build();
         List<PostDto> posts = postService.getPostsByUser(id);
         return ResponseEntity.ok(posts);
     }
-
-    @DeleteMapping("/delete-user/{userId}")
+    
+    @DeleteMapping("/delete-by-user/{userId}")
     public ResponseEntity<Map<String,String>> deletePostsByUser(@PathVariable("userId") Long id){
-        if(userClient.getUserById(id)==null) return ResponseEntity.notFound().build();
         postService.deletePostsByUserId(id);
         Map<String,String> result = new HashMap<>();
         result.put("message", "Posts user: "+ id + " ,successfully be deleted.");
