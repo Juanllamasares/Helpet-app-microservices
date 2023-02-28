@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.helpet.postservice.clients.CommentFeingClient;
+import com.helpet.postservice.clients.UserFeingClient;
 import com.helpet.postservice.dto.CreatePostDto;
 import com.helpet.postservice.dto.PostDto;
 import com.helpet.postservice.service.PostServiceImpl;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.validation.Valid;
 
 @RestController
@@ -28,12 +31,22 @@ public class PostController {
     
     @Autowired
     private PostServiceImpl postService;
+    @Autowired
+    private UserFeingClient userClient;
+    @Autowired
+    private CommentFeingClient commentClient;
+
 
     @PostMapping("/create")
+    @CircuitBreaker(name = "usersCB",fallbackMethod = "fallBackGetUser")
     public ResponseEntity<String> createPost(@Valid @RequestBody CreatePostDto createPostDto){
-        if(!postService.createPost(createPostDto))return ResponseEntity.notFound().build();
+        if(userClient.getUserById(createPostDto.getUser())==null) return ResponseEntity.notFound().build();
         postService.createPost(createPostDto);
         return new ResponseEntity<>("Post successfully created.",HttpStatus.CREATED);
+    }
+
+    public String fallBackGetUser(RuntimeException e){
+        return "User service error.";
     }
     
     @DeleteMapping("/delete/{id}")
