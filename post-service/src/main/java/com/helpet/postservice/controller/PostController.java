@@ -45,8 +45,8 @@ public class PostController {
         return new ResponseEntity<>("Post successfully created.",HttpStatus.CREATED);
     }
 
-    public String fallBackGetUser(RuntimeException e){
-        return "User service error.";
+    private ResponseEntity<String> fallBackGetUser(RuntimeException e){
+        return ResponseEntity.ok("User service error.");
     }
     
     @DeleteMapping("/delete/{id}")
