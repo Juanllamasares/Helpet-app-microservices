@@ -18,12 +18,12 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/users/**
+            - Path=/api/users/**
         - id: post-service
           uri: lb://post-service
           predicates:
-            - Path=/posts/**
+            - Path=/api/posts/**
         - id: comment-service
           uri: lb://comment-service
           predicates:
-            - Path=/comments/**
+            - Path=/api/comments/**
