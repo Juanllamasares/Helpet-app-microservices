@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.helpet.postservice.clients.CommentFeingClient;
 import com.helpet.postservice.clients.UserFeingClient;
 import com.helpet.postservice.dto.CreatePostDto;
 import com.helpet.postservice.dto.PostDto;
@@ -33,8 +32,6 @@ public class PostController {
     private PostServiceImpl postService;
     @Autowired
     private UserFeingClient userClient;
-    @Autowired
-    private CommentFeingClient commentClient;
 
 
     @PostMapping("/create")
@@ -45,7 +42,7 @@ public class PostController {
         return new ResponseEntity<>("Post successfully created.",HttpStatus.CREATED);
     }
 
-    private ResponseEntity<String> fallBackGetUser(RuntimeException e){
+    public ResponseEntity<String> fallBackGetUser(RuntimeException e){
         return ResponseEntity.ok("User service error.");
     }
     
