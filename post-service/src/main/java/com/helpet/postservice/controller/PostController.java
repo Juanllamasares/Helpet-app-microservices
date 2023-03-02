@@ -37,13 +37,13 @@ public class PostController {
     @PostMapping("/create")
     @CircuitBreaker(name = "usersCB",fallbackMethod = "fallBackGetUser")
     public ResponseEntity<String> createPost(@Valid @RequestBody CreatePostDto createPostDto){
-        if(userClient.getUserById(createPostDto.getUser())==null) return ResponseEntity.notFound().build();
+        if(userClient.getUserById(createPostDto.getUser()).getStatusCode() == HttpStatus.NOT_FOUND) return ResponseEntity.notFound().build();
         postService.createPost(createPostDto);
         return new ResponseEntity<>("Post successfully created.",HttpStatus.CREATED);
     }
 
     public ResponseEntity<String> fallBackGetUser(RuntimeException e){
-        return ResponseEntity.ok("User service error.");
+        return new ResponseEntity<>("User service error: User not found",HttpStatus.NOT_FOUND);
     }
     
     @DeleteMapping("/delete/{id}")
