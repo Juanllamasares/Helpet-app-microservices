@@ -8,8 +8,7 @@
             "mainClass": "com.helpet.configservice.ConfigServiceApplication",
             "projectName": "config-service",
             "args": "",
-            "envFile": "${workspaceFolder}/.env",
-            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=51976 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=config-service"
+            "envFile": "${workspaceFolder}/.env"
         },
         {
             "type": "java",
@@ -19,8 +18,7 @@
             "mainClass": "com.helpet.gatewayservice.GatewayServiceApplication",
             "projectName": "gateway-service",
             "args": "",
-            "envFile": "${workspaceFolder}/.env",
-            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=57693 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=gateway-service"
+            "envFile": "${workspaceFolder}/.env"
         },
         {
             "type": "java",
@@ -30,8 +28,7 @@
             "mainClass": "com.helpet.eurekaservice.EurekaServiceApplication",
             "projectName": "eureka-service",
             "args": "",
-            "envFile": "${workspaceFolder}/.env",
-            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=57758 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=eureka-service"
+            "envFile": "${workspaceFolder}/.env"
         },
         {
             "type": "java",
@@ -41,8 +38,7 @@
             "mainClass": "com.helpet.postservice.PostServiceApplication",
             "projectName": "post-service",
             "args": "",
-            "envFile": "${workspaceFolder}/.env",
-            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=52030 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=post-service"
+            "envFile": "${workspaceFolder}/.env"
         },
         {
             "type": "java",
@@ -51,17 +47,6 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "com.helpet.userservice.UserServiceApplication",
             "projectName": "user-service",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env",
-            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=57878 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=user-service"
-        },
-        {
-            "type": "java",
-            "name": "Spring Boot-CommentServiceApplication<comment-service>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "com.helpet.commentservice.CommentServiceApplication",
-            "projectName": "comment-service",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }

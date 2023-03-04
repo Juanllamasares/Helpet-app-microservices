@@ -8,9 +8,10 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-spring:
-  application:
-    zipkin: http://localhost:9411
+management:
+  tracing:
+    sampling:
+      probability: 1.0
 
 resilience4j.circuitbreaker:
     instances:
