@@ -32,19 +32,3 @@ spring:
           predicates:
             - Path=/api/comments/**
   
-  security:
-    oauth2:
-      client:
-        provider:
-          keycloak:
-            authorization-uri: http://localhost:9000/realms/Helpet/protocol/openid-connect/auth
-            userinfo-uri: http://localhost:9000/realms/Helpet/protocol/openid-connect/userinfo
-            user-name-attribute: preferred_username
-            token-uri: http://localhost:9000/realms/Helpet/protocol/openid-connect/token
-          registration:
-            helpet-client:
-              provider: keycloak
-              client-id: helpet-client
-              client-secret: 
-              authorization-grant-type:
-              redirect-uri: 
