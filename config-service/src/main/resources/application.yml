@@ -6,7 +6,7 @@ spring:
         config:
             server:
                 git:
-                    default-label: zipkin
+                    default-label: jwt
                     uri: https://github.com/Juanllamasares/Helpet-app-microservices
                     search-paths: config-data
     application: 
