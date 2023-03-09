@@ -11,8 +11,6 @@ eureka:
 spring:
   cloud:
     gateway:
-      default-filters:
-        - TokenRelay
       discovery:
         locator:
           enabled: true
@@ -21,8 +19,6 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
-          filters:
-            - RemoveRequestHeader=Cookie
         - id: post-service
           uri: lb://post-service
           predicates:
