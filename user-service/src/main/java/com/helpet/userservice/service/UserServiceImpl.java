@@ -8,12 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.helpet.userservice.dto.RequestUserDto;
-import com.helpet.userservice.clients.PostFeingClient;
 import com.helpet.userservice.dto.CreateUserDto;
 import com.helpet.userservice.entity.User;
 import com.helpet.userservice.repository.IUserRepository;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -24,9 +22,6 @@ public class UserServiceImpl implements IUserService{
     private IUserRepository userRepo;
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private PostFeingClient postClient;
-
 
     @Override
     public RequestUserDto getUserByUsername(String username) {
@@ -75,13 +70,18 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    @CircuitBreaker(name = "postsCB", fallbackMethod = "fallBackDeletePostsByUserId")
     public void deleteUser(Long id) {
         userRepo.deleteById(id);
-        postClient.deletePostsByUser(id);
     }
-    
-    public String fallBackDeletePostsByUserId(){
-        return "Something went wrong, try again after some time.";
+
+    @Override
+    public void updateUser(Long id, CreateUserDto userDto) {
+        User entity = userRepo.findById(id).get();
+        entity.setName(userDto.getName());
+        entity.setUsername(userDto.getUsername());
+        entity.setEmail(userDto.getEmail());
+        entity.setPassword(userDto.getPassword());
+
+        userRepo.save(entity);
     }
 }

@@ -22,5 +22,5 @@ public interface IUserService {
 
     public void deleteUser(Long id);
 
-    
+    public void updateUser(Long id, CreateUserDto userDto);
 }

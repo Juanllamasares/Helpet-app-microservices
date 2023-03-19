@@ -11,5 +11,9 @@ public class Post {
     
     private Long id;
     private Date date;
-    private String content;
+    private String status;
+    private String description;
+    private String img;
+    private String location;
+    private Long user;
 }

@@ -1,12 +1,20 @@
 package com.helpet.userservice.clients;
 
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import java.util.List;
 
-@FeignClient(name = "post-service", url = "http://localhost:8081/api/posts")
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.helpet.userservice.models.Post;
+
+@FeignClient(name = "post-service")
 public interface PostFeingClient {
-    @DeleteMapping("/delete-user/{userId}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/api/posts/delete-by-user/{userId}")
     public void deletePostsByUser(@PathVariable("userId") Long id);
+
+    @RequestMapping(method = RequestMethod.GET,value = "/api/posts/user/{userId}")
+    public List<Post> getPostsByUser(@PathVariable("userId") Long id);
 
 }

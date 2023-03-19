@@ -87,6 +87,7 @@ public class PostController {
     
     @DeleteMapping("/delete-by-user/{userId}")
     public ResponseEntity<Map<String,String>> deletePostsByUser(@PathVariable("userId") Long id){
+        if(postService.getPostsByUser(id)==null) return ResponseEntity.noContent().build();
         postService.deletePostsByUserId(id);
         Map<String,String> result = new HashMap<>();
         result.put("message", "Posts user: "+ id + " ,successfully be deleted.");
