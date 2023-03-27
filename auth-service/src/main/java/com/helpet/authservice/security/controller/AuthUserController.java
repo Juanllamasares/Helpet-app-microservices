@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.helpet.authservice.security.dto.CreateAuthUserDto;
+import com.helpet.authservice.security.dto.JwtTokenDto;
+import com.helpet.authservice.security.dto.LoginUserDto;
 import com.helpet.authservice.security.dto.MessageDto;
+import com.helpet.authservice.security.exception.AttributeException;
 import com.helpet.authservice.security.service.AuthUserServiceImpl;
 
 import jakarta.validation.Valid;
@@ -24,8 +27,14 @@ public class AuthUserController {
     private AuthUserServiceImpl authUserServiceImpl;
     
     @PostMapping("/signup")
-    public ResponseEntity<MessageDto> signup(@Valid @RequestBody CreateAuthUserDto dto) throws AttributeInUseException{
-        authUserServiceImpl.createUser(dto);
+    public ResponseEntity<MessageDto> signup(@Valid @RequestBody CreateAuthUserDto dto) throws AttributeException{
+        authUserServiceImpl.create(dto);
         return ResponseEntity.ok(new MessageDto(HttpStatus.OK, "user have been created"));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<JwtTokenDto> login(@Valid @RequestBody LoginUserDto dto) throws AttributeInUseException{
+        JwtTokenDto jwtTokenDto = authUserServiceImpl.login(dto);
+        return ResponseEntity.ok(jwtTokenDto);
     }
 }

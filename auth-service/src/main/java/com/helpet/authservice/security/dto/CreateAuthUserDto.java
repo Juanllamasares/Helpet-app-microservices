@@ -1,5 +1,7 @@
 package com.helpet.authservice.security.dto;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.Email;
@@ -31,5 +33,5 @@ public class CreateAuthUserDto {
     private String password;
 
     @NotEmpty(message = "Roles should not be empty")
-    private List<String> roles;
+    List<String> roles = new ArrayList<>();
 }

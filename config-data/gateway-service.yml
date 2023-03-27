@@ -19,12 +19,18 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
+          filters: 
+            - AuthFilter
         - id: post-service
           uri: lb://post-service
           predicates:
             - Path=/api/posts/**
+          filters: 
+            - AuthFilter
         - id: comment-service
           uri: lb://comment-service
           predicates:
             - Path=/api/comments/**
+          filters: 
+            - AuthFilter
   

@@ -7,7 +7,7 @@ spring:
             enabled: true
             uri: http://localhost:8000
 jwt:
-    secret: s3cr3t
+    secret: secreth32gjh4b2j1239718269uhjnkaj
 
 springdoc:
     api-docs:
