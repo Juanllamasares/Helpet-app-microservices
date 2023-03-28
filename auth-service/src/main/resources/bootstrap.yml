@@ -8,6 +8,7 @@ spring:
             uri: http://localhost:8000
 jwt:
     secret: secreth32gjh4b2j1239718269uhjnkaj
+    expiration: 360000
 
 springdoc:
     api-docs:

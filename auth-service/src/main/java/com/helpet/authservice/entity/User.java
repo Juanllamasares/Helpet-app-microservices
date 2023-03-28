@@ -1,8 +1,4 @@
-package com.helpet.authservice.security.entity;
-
-import java.util.List;
-
-import com.helpet.authservice.security.enums.RoleEnum;
+package com.helpet.authservice.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,30 +7,30 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @AllArgsConstructor @NoArgsConstructor
-@Builder
-@Table(name = "tbl_auth_users")
-public class AuthUser {
+@Table(name = "tbl_users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 50)
     private String name;
 
-    @Column(unique = true)
-    private String email;
-
-    @Column(name = "user_name",unique = true)
+    @Column(unique = true,length = 50)
     private String username;
 
-    private String password;
-    
-    private List<RoleEnum> roles;
+    @Column(unique = true,length = 100)
+    private String email;
 
+    @Column(length = 50)
+    private String password;
+
+    @Column(length = 500)
+    private String avatar;
 }
