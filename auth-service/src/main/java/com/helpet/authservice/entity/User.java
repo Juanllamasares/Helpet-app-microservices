@@ -1,5 +1,9 @@
 package com.helpet.authservice.entity;
 
+import java.util.List;
+
+import com.helpet.authservice.enums.RolEnums;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,9 +32,11 @@ public class User {
     @Column(unique = true,length = 100)
     private String email;
 
-    @Column(length = 50)
+    @Column(length = 1000)
     private String password;
 
     @Column(length = 500)
     private String avatar;
+
+    private List<RolEnums> roles;
 }

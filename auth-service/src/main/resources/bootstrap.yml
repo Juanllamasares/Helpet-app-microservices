@@ -1,17 +1,11 @@
-
 spring:
-    application:
-        name: auth-service
-    cloud:
-        config:
-            enabled: true
-            uri: http://localhost:8000
-jwt:
-    secret: secreth32gjh4b2j1239718269uhjnkaj
-    expiration: 360000
+  application:
+    name: auth-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8000
 
-springdoc:
-    api-docs:
-        path: /api-docs 
-    swagger-ui:
-        path: /swagger.html
+jwt:
+  secret: secret67878990asdjasjdghaiusgabkjn
+  expiration: 360000

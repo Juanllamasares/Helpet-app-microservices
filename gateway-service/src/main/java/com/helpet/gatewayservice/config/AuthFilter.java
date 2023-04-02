@@ -32,7 +32,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
             if(chunks.length != 2 || !chunks[0].equals("Bearer"))
                 return onError(exchange, HttpStatus.BAD_REQUEST);
             return webClient.build()
-                    .post()
+                    .post()/*  */
                     .uri("http://auth-service/auth/validate?token=" + chunks[1])
                     .retrieve().bodyToMono(TokenDto.class)
                     .map(t -> {

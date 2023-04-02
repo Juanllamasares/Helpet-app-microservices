@@ -33,4 +33,8 @@ spring:
             - Path=/api/comments/**
           filters: 
             - AuthFilter
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
   
