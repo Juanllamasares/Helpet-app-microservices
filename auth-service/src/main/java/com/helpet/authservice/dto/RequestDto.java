@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor
-public class TokenDto {
-    private String token;
+public class RequestDto {
+    private String uri;
+    private String method;
 }

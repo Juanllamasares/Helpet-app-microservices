@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.helpet.authservice.entity.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>{
-    Optional<User> findUserByUsernameOrEmail(String username,String email);
+public interface UserRepo extends JpaRepository<User, Long>{
+    Optional<User> findByUsernameOrEmail(String username, String email);
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
 }

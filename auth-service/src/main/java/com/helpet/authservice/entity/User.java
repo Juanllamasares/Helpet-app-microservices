@@ -2,7 +2,7 @@ package com.helpet.authservice.entity;
 
 import java.util.List;
 
-import com.helpet.authservice.enums.RolEnums;
+import com.helpet.authservice.enums.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@AllArgsConstructor @NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = "tbl_users")
 public class User {
     @Id
@@ -25,18 +25,15 @@ public class User {
 
     @Column(length = 50)
     private String name;
-
-    @Column(unique = true,length = 50)
-    private String username;
-
-    @Column(unique = true,length = 100)
+    @Column(length = 100)
     private String email;
-
+    @Column(length = 50)
+    private String username;
     @Column(length = 1000)
     private String password;
-
     @Column(length = 500)
     private String avatar;
 
-    private List<RolEnums> roles;
+    private List<Role> roles;
+
 }

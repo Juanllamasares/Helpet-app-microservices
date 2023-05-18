@@ -12,40 +12,46 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import com.helpet.authservice.entity.UserPrincipal;
+import com.helpet.authservice.entity.UserDetailsImpl;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 
 @Component
 public class JwtProvider {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 
     @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.expiration}")
-    private int exp;
+    private int expiration;
 
     public String generateToken(Authentication authentication){
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
+
         return Jwts.builder()
                    .signWith(getKey(secret))
-                   .setSubject(userPrincipal.getUsername())
-                   .setIssuedAt(new Date())
-                   .setExpiration(new Date(new Date().getTime() + exp * 1000))
-                   .claim("roles", getRoles(userPrincipal))
+                   .setSubject(userDetailsImpl.getUsername())
+                   .setIssuedAt(new Date(new Date().getTime() + expiration * 1000))
+                   .claim("roles", getRoles(userDetailsImpl))
+                   .claim("app", "helpet app")
                    .compact();
     }
 
-    public String getUsernameFromToken(String token){
-        return Jwts.parserBuilder().setSigningKey(getKey(secret)).build().parseClaimsJws(token).getBody().getSubject();
+    public String getUsernameFromToken(String token) {
+        return Jwts.parserBuilder()
+                   .setSigningKey(getKey(secret))
+                   .build()
+                   .parseClaimsJws(token)
+                   .getBody()
+                   .getSubject();
     }
 
     public boolean validateToken(String token){
@@ -68,12 +74,12 @@ public class JwtProvider {
         return false;
     }
 
-    private List<String> getRoles(UserPrincipal principal){
-        return principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+    private List<String> getRoles(UserDetailsImpl userDetailsImpl){
+        return userDetailsImpl.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
     }
 
     private Key getKey(String secret){
-        byte [] secretBytes = Decoders.BASE64URL.decode(secret);
+        byte[] secretBytes = Decoders.BASE64URL.decode(secret);
         return Keys.hmacShaKeyFor(secretBytes);
     }
 

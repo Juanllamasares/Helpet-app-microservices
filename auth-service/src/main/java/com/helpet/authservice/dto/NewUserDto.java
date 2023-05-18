@@ -1,37 +1,36 @@
 package com.helpet.authservice.dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor @NoArgsConstructor
+@Builder
+@NoArgsConstructor @AllArgsConstructor
 public class NewUserDto {
+    
+    private Long id;
 
-    @Size(min = 2,max = 50,message = "Name: min 2 and max 50 characters")
-    @NotBlank(message = "Name is mandatory")
+    @NotBlank(message = "name is required")
+    @Size(min = 2,max = 50,message = "Name: min 2, max 50 caracters required")
     private String name;
-
-    @Size(min = 2,max = 50, message = "Username: min 2 and max 50 characters")
-    @NotBlank(message = "Username is mandatory")
-    private String username;
-
-    @Email(message = "Invalid email")
+    @NotBlank(message = "email is required")
+    @Email(message = "invalid email")
     private String email;
-    
-    @Size(min = 5,max = 50,message = "Password: min 5 and max 50 characters")
-    @NotBlank(message = "Password is mandatory")
+    @NotBlank(message = "username is required")
+    @Size(min = 2,max = 50,message = "Username: min 2, max 50 caracters required")
+    private String username;
+    @NotBlank(message = "password is required")
+    @Size(min = 5,max = 50,message = "Password: min 5, max 50 caracters required")
     private String password;
-    
+
     private String avatar;
 
-    /* @NotEmpty(message = "Roles not be empty")
-    @Size(min = 1, max = 2, message = "Min one and max two roles are permited") */
-    private List<String> roles = new ArrayList<>();
+    List<String> roles;
 }

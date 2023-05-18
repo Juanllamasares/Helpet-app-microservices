@@ -10,19 +10,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class UserPrincipal implements UserDetails{
-    private String username;
+public class UserDetailsImpl implements UserDetails{
 
     private String email;
-
+    private String username;
     private String password;
-
     private Collection<? extends GrantedAuthority> authorities;
 
-    public static UserPrincipal build(User user){
+    public static UserDetailsImpl build(User user){
         Collection<GrantedAuthority> authorities = user.getRoles().stream().map(rol -> new SimpleGrantedAuthority(rol.name())).collect(Collectors.toList());
-
-        return new UserPrincipal(user.getUsername(),user.getEmail(),user.getPassword(),authorities);
+        return new UserDetailsImpl(user.getEmail(), user.getUsername(), user.getPassword(), authorities);
     }
 
     @Override
@@ -37,11 +34,11 @@ public class UserPrincipal implements UserDetails{
 
     @Override
     public String getUsername() {
-        return username;
+       return username;
     }
 
     public String getEmail() {
-        return email;
+       return email;
     }
 
     @Override
@@ -63,4 +60,5 @@ public class UserPrincipal implements UserDetails{
     public boolean isEnabled() {
         return true;
     }
+    
 }

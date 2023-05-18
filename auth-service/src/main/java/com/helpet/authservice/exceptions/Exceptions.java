@@ -1,11 +1,11 @@
 package com.helpet.authservice.exceptions;
 
-import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,7 +41,7 @@ public class Exceptions {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<MessageDto> accessDeniedException(AccessDeniedException accessDeniedException) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(new MessageDto(HttpStatus.FORBIDDEN, "cannot access this resource"));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new MessageDto(HttpStatus.UNAUTHORIZED, "cannot access this resource"));
     }
 }

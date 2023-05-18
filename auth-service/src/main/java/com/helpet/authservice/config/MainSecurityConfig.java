@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,19 +19,19 @@ import com.helpet.authservice.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class MainSecurityConfig {
-
     @Autowired
     UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
-    private JwtEntryPoint jwtEntryPoint;
+    JwtEntryPoint jwtEntryPoint;
 
     @Autowired
-    private JwtFilter jwtFilter;
+    JwtFilter jwtFilter;
 
     AuthenticationManager authenticationManager;
 
@@ -49,5 +50,4 @@ public class MainSecurityConfig {
         return http.build();
 
     }
-    
 }
