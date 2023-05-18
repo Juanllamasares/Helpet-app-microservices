@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.helpet.authservice.dto.RequestDto;
 import com.helpet.authservice.entity.UserDetailsImpl;
+import com.helpet.authservice.utils.RouteValidator;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -32,6 +35,9 @@ public class JwtProvider {
 
     @Value("${jwt.expiration}")
     private int expiration;
+
+    @Autowired
+    private RouteValidator routeValidator;
 
     public String generateToken(Authentication authentication){
         UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
@@ -81,6 +87,21 @@ public class JwtProvider {
     private Key getKey(String secret){
         byte[] secretBytes = Decoders.BASE64URL.decode(secret);
         return Keys.hmacShaKeyFor(secretBytes);
+    }
+
+    public boolean validate(String token, RequestDto dto) {
+        try {
+            Jwts.parserBuilder().setSigningKey(getKey(secret)).build().parseClaimsJws(token);
+        }catch (Exception e){
+            return false;
+        }
+        if(!isAdmin(token) && routeValidator.isAdminPath(dto))
+            return false;
+        return true;
+    }
+
+    private boolean isAdmin(String token) {
+        return ((String) Jwts.parserBuilder().setSigningKey(getKey(secret)).build().parseClaimsJws(token).getBody().get("roles")).contains("ROLE_ADMIN");
     }
 
 }

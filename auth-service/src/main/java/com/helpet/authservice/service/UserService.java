@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.helpet.authservice.dto.LoginDto;
 import com.helpet.authservice.dto.MessageDto;
 import com.helpet.authservice.dto.NewUserDto;
+import com.helpet.authservice.dto.RequestDto;
 import com.helpet.authservice.dto.TokenDto;
 import com.helpet.authservice.dto.UserDto;
 import com.helpet.authservice.entity.User;
@@ -98,6 +99,15 @@ public class UserService {
 
         String token = jwtProvider.generateToken(authentication);
 
+        return new TokenDto(token);
+    }
+
+    public TokenDto validate(String token, RequestDto dto) {
+        if(!jwtProvider.validate(token, dto))
+            return null;
+        String username = jwtProvider.getUsernameFromToken(token);
+        if(!userRepo.findByUsernameOrEmail(username,username).isPresent())
+            return null;
         return new TokenDto(token);
     }
 }

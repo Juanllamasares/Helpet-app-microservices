@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.helpet.authservice.dto.LoginDto;
 import com.helpet.authservice.dto.MessageDto;
 import com.helpet.authservice.dto.NewUserDto;
+import com.helpet.authservice.dto.RequestDto;
 import com.helpet.authservice.dto.TokenDto;
 import com.helpet.authservice.dto.UserDto;
 import com.helpet.authservice.service.UserService;
@@ -48,6 +50,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto){
         TokenDto tokenDto = userService.login(loginDto);
+        return ResponseEntity.ok(tokenDto);
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<TokenDto> validate(@RequestParam String token, @RequestBody RequestDto dto){
+        TokenDto tokenDto = userService.validate(token, dto);
+        if(tokenDto == null)
+            return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(tokenDto);
     }
 }
