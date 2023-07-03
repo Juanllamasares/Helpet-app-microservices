@@ -2,10 +2,12 @@ package com.helpet.authservice.controller;
 
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +49,12 @@ public class AuthController {
         return ResponseEntity.ok(userService.getUsers());
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<UserDto> getUser(@PathVariable(name="userId") Long id){
+        if(userService.getUserById(id)==null)return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto){
         TokenDto tokenDto = userService.login(loginDto);
@@ -57,7 +65,8 @@ public class AuthController {
     public ResponseEntity<TokenDto> validate(@RequestParam String token, @RequestBody RequestDto dto){
         TokenDto tokenDto = userService.validate(token, dto);
         if(tokenDto == null)
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).build();
         return ResponseEntity.ok(tokenDto);
     }
+
 }

@@ -44,7 +44,7 @@ public class UserService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    
+    /*=================================CREATE USERS METHODS======================================== */    
     public MessageDto createUser(NewUserDto dto){
         if(userRepo.existsByUsername(dto.getUsername())) return new MessageDto(HttpStatus.CONFLICT,"username allready exists");
         if(userRepo.existsByEmail(dto.getEmail())) return new MessageDto(HttpStatus.CONFLICT,"email allready exists");
@@ -55,7 +55,6 @@ public class UserService {
         userRepo.save(user);
         return new MessageDto(HttpStatus.CREATED,"New user created");
     }
-
     public MessageDto createAdmin(NewUserDto dto){
         if(userRepo.existsByUsername(dto.getUsername())) return new MessageDto(HttpStatus.CONFLICT,"username allready exists");
         if(userRepo.existsByEmail(dto.getEmail())) return new MessageDto(HttpStatus.CONFLICT,"email allready exists");
@@ -66,32 +65,34 @@ public class UserService {
         userRepo.save(user);
         return new MessageDto(HttpStatus.CREATED,"New admin created");
     }
-
+    /*=================================GET USERS METHODS======================================== */
     public List<UserDto> getUsers(){
         List<User> users = userRepo.findAll();
         List<UserDto> dtos = new ArrayList<>();
         users.forEach(user -> dtos.add(modelMapper.map(user, UserDto.class)));
         return dtos;
     }
-
     public UserDto getUserById(Long userId){
         User user = userRepo.findById(userId).get();
         UserDto dto = modelMapper.map(user, UserDto.class);
         return dto;
     }
-
     public UserDto getUserByUsernameOrEmail(String username,String email){
         User user = userRepo.findByUsernameOrEmail(username, email).get();
         UserDto dto = modelMapper.map(user, UserDto.class);
         return dto;
     }
-
+    /*=================================DELETE USERS METHODS======================================== */
     public MessageDto deleteUser(Long userId){
         if(userRepo.findById(userId)==null) return new MessageDto(HttpStatus.BAD_REQUEST,"user with id: "+userId+" not exists");
         userRepo.deleteById(userId);
         return new MessageDto(HttpStatus.OK,"user deleted");
     }
-
+    public MessageDto deleteUsers(){
+        userRepo.deleteAll();
+        return new MessageDto(HttpStatus.OK,"users deleted");
+    }
+    /*=================================LOGIN AND VALIDATIONS======================================== */
     public TokenDto login(LoginDto loginDto){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
 
@@ -101,7 +102,6 @@ public class UserService {
 
         return new TokenDto(token);
     }
-
     public TokenDto validate(String token, RequestDto dto) {
         if(!jwtProvider.validate(token, dto))
             return null;
@@ -110,4 +110,5 @@ public class UserService {
             return null;
         return new TokenDto(token);
     }
+    
 }

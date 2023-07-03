@@ -100,8 +100,8 @@ public class JwtProvider {
         return true;
     }
 
-    private boolean isAdmin(String token) {
-        return ((String) Jwts.parserBuilder().setSigningKey(getKey(secret)).build().parseClaimsJws(token).getBody().get("roles")).contains("ROLE_ADMIN");
+    public boolean isAdmin(String token) {
+        return Jwts.parserBuilder().setSigningKey(getKey(secret)).build().parseClaimsJws(token).getBody().get("roles").toString().contains("ROLE_ADMIN");
     }
 
 }
